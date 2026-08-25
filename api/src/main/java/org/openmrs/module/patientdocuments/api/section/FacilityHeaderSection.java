@@ -118,24 +118,22 @@ public class FacilityHeaderSection extends TypedSection<FacilityInfo> {
 	}
 
 	/**
-	 * Loads the configured facility logo as a base64 data URI, using the same
-	 * mechanism as the patient ID sticker logo: report.visitSummary.logourl
-	 * holds a PNG path relative to the application data directory, resolved
-	 * with path-traversal protection by {@link Helper#getImageAsDataUri(String)}.
-	 * Returns "" when unconfigured or unreadable so the header renders without
-	 * a logo instead of failing the PDF.
+	 * Loads the facility logo as a base64 data URI, using the same mechanism as the patient
+	 * ID sticker logo: report.visitSummary.logourl holds a PNG path relative to the
+	 * application data directory, resolved with path-traversal protection by
+	 * {@link Helper#getImageAsDataUri(String)}. Falls back to the module's bundled default
+	 * logo when unconfigured or unreadable.
 	 */
 	private String loadLogo() {
 		String logoPath = ConfigUtil.getProperty(LOGO_PATH_PROPERTY);
-		if (StringUtils.isBlank(logoPath)) {
-			return "";
+		if (StringUtils.isNotBlank(logoPath)) {
+			String dataUri = Helper.getImageAsDataUri(logoPath.trim());
+			if (dataUri != null) {
+				return dataUri;
+			}
+			log.warn("Visit summary logo '{}' could not be read; falling back to the default logo", logoPath);
 		}
-		String dataUri = Helper.getImageAsDataUri(logoPath.trim());
-		if (dataUri == null) {
-			log.warn("Visit summary logo '{}' could not be read; rendering header without a logo", logoPath);
-			return "";
-		}
-		return dataUri;
+		return StringUtils.defaultString(Helper.getDefaultLogoAsDataUri());
 	}
 
 	@Override

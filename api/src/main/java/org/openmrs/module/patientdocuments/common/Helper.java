@@ -120,6 +120,29 @@ public class Helper {
 		}
 	}
 
+	/**
+	 * Loads the module's bundled default logo (used whenever a PDF's logo isn't configured
+	 * via a report.*.logo* global property) as a base64 PNG data URI.
+	 *
+	 * @return the data URI, or {@code null} if the bundled resource is missing or unreadable
+	 */
+	public static String getDefaultLogoAsDataUri() {
+		try (InputStream logoStream = getInputStreamByResource(PatientDocumentsConstants.DEFAULT_LOGO_CLASSPATH)) {
+			if (logoStream == null) {
+				log.warn("Default logo not found on classpath at: {}", PatientDocumentsConstants.DEFAULT_LOGO_CLASSPATH);
+				return null;
+			}
+			byte[] logoBytes = IOUtils.toByteArray(logoStream);
+			if (logoBytes.length == 0) {
+				return null;
+			}
+			return "data:image/png;base64," + Base64.getEncoder().encodeToString(logoBytes);
+		} catch (IOException e) {
+			log.warn("Failed to load default logo from classpath at: {}", PatientDocumentsConstants.DEFAULT_LOGO_CLASSPATH, e);
+			return null;
+		}
+	}
+
 	/** Identifies a raster image from its leading signature bytes, or null if unsupported. */
 	private static String detectImageMediaType(byte[] bytes) {
 		if (startsWith(bytes, PNG_SIGNATURE)) {

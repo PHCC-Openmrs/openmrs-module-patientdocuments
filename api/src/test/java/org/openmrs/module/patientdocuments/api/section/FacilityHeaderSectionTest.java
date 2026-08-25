@@ -144,20 +144,20 @@ public class FacilityHeaderSectionTest extends BaseModuleContextSensitiveTest {
 	}
 
 	@Test
-	public void gatherData_shouldReturnEmptyLogoWhenPropertyUnset() {
+	public void gatherData_shouldReturnDefaultLogoWhenPropertyUnset() {
 		FacilityInfo info = section.gatherData(visitWithPhoneAttribute(null));
 
-		Assertions.assertEquals("", info.getLogoData());
+		Assertions.assertTrue(info.getLogoData().startsWith("data:image/png;base64,"));
 	}
 
 	@Test
-	public void gatherData_shouldReturnEmptyLogoWhenConfiguredFileIsUnreadable() {
+	public void gatherData_shouldReturnDefaultLogoWhenConfiguredFileIsUnreadable() {
 		Context.getAdministrationService().saveGlobalProperty(
 				new GlobalProperty(LOGO_PROPERTY, "printing/does-not-exist.png"));
 
 		FacilityInfo info = section.gatherData(visitWithPhoneAttribute(null));
 
-		// An unreadable logo must degrade to no logo, never fail the whole PDF.
-		Assertions.assertEquals("", info.getLogoData());
+		// An unreadable configured logo must degrade to the bundled default, never fail the whole PDF.
+		Assertions.assertTrue(info.getLogoData().startsWith("data:image/png;base64,"));
 	}
 }
