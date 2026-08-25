@@ -72,7 +72,7 @@ public class PatientIdStickerXmlReportRenderer extends ReportDesignRenderer {
 	
 	private static final Logger log = LoggerFactory.getLogger(PatientIdStickerXmlReportRenderer.class);
 
-	private static final String DEFAULT_LOGO_CLASSPATH = "web/module/resources/openmrs_logo_white_large.png";
+	private static final String DEFAULT_LOGO_CLASSPATH = PatientDocumentsConstants.DEFAULT_LOGO_CLASSPATH;
 	
 	private MessageSourceService mss;
 	

@@ -91,25 +91,21 @@ public class EncounterXmlBuilder {
 
 	private String getLogoContent() {
 		String logoPath = getInitializerService().getValueFromKey(PatientDocumentsConstants.ENCOUNTER_PRINTING_LOGO_PATH_KEY);
-		if (StringUtils.isBlank(logoPath)) {
-			return null;
-		}
-
-		File logoFile = Helper.getFileFromAppDataDir(logoPath);
-		if (logoFile == null || !logoFile.isFile() || !logoFile.canRead()) {
-			return null;
-		}
-
-		try {
-			byte[] logoBytes = OpenmrsUtil.getFileAsBytes(logoFile);
-			if (logoBytes != null && logoBytes.length > 0) {
-				return "data:image/png;base64," + Base64.getEncoder().encodeToString(logoBytes);
+		if (StringUtils.isNotBlank(logoPath)) {
+			File logoFile = Helper.getFileFromAppDataDir(logoPath);
+			if (logoFile != null && logoFile.isFile() && logoFile.canRead()) {
+				try {
+					byte[] logoBytes = OpenmrsUtil.getFileAsBytes(logoFile);
+					if (logoBytes != null && logoBytes.length > 0) {
+						return "data:image/png;base64," + Base64.getEncoder().encodeToString(logoBytes);
+					}
+				} catch (IOException e) {
+					log.warn("Unable to read logo file");
+				}
 			}
-		} catch (IOException e) {
-			log.warn("Unable to read logo file");
 		}
 
-		return null;
+		return Helper.getDefaultLogoAsDataUri();
 	}
 
 	public String build(EncounterPrintingContext printingContext) {

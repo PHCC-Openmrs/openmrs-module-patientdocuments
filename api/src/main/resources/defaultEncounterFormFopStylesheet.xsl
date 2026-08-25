@@ -47,8 +47,8 @@
                     </fo:static-content>
 
                     <fo:flow flow-name="xsl-region-body">
-                        <fo:block text-align="center" margin-bottom="4mm">
-                            <fo:external-graphic width="100mm" height="25mm" content-width="scale-down-to-fit" content-height="scale-down-to-fit">
+                        <fo:block text-align="center" margin-bottom="7mm">
+                            <fo:external-graphic width="75mm" height="18mm" content-width="scale-down-to-fit" content-height="scale-down-to-fit">
                                 <xsl:attribute name="src"><xsl:value-of select="logo"/></xsl:attribute>
                             </fo:external-graphic>
                         </fo:block>

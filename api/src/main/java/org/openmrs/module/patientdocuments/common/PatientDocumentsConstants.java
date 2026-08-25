@@ -54,6 +54,12 @@ public class PatientDocumentsConstants {
 
 	public static final String ENCOUNTER_PRINTING_LOGO_PATH_KEY = "report.encounterPrinting.logopath";
 
+	/**
+	 * Classpath location of the logo bundled with the module, used whenever a PDF's logo
+	 * isn't configured via a report.*.logo* global property.
+	 */
+	public static final String DEFAULT_LOGO_CLASSPATH = "web/module/resources/care_logo.png";
+
 	public static final String VISIT_SUMMARY_SECTION_PREFIX = "report.visitSummary.section.";
 
 	public static final String NO_DATA_RECORDED_PLACEHOLDER = "No data recorded";
